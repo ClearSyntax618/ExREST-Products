@@ -1,8 +1,6 @@
 import passport from "passport";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
-import jwt from 'jsonwebtoken'
-
 import { pool } from "../config/db.config.js";
 
 const cookieExtractor = (req) => {
@@ -25,6 +23,22 @@ passport.use(new JwtStrategy({
         }
     } catch (error) {
         console.log(error);
-        return done(err, false);
+        return done(error, false);
     }
 }));
+
+// isAuth checker
+export const isAuth = (req, res, next) => {
+    const { user: {status} } = req.cookies;
+
+    try {
+        if(!status || status == undefined) {
+            return next();
+        } else {
+            return res.redirect('/profile')
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message: "Internal server error"});
+    }
+}

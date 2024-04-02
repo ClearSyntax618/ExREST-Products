@@ -24,13 +24,7 @@ const signUp = async (req, res) => {
                 message: 'Invalid field params.'
             })
         }
-        
-        // Create a jsonwebtoken.
-        const token = jwt.sign({email}, process.env.SECRET_KEY, {expiresIn: 60*60});
 
-        // Encrypt password.
-        const salt = bcrypt.genSaltSync(10);
-        const hashedPassword = bcrypt.hashSync(password, salt);
 
         // Check if there is a user registered with same email.
         const {rows} = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
@@ -39,9 +33,16 @@ const signUp = async (req, res) => {
             return res.status(409).json({message: "Email already registered."});
         }
 
+        
+        // Create a jsonwebtoken.
+        const token = jwt.sign({email}, process.env.SECRET_KEY, {expiresIn: 60*60});
+
+        // Encrypt password.
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
         // Save {name, email, password, created_at, products} fields in database.
         await pool.query("INSERT INTO users (name, email, password, created_at) VALUES ($1, $2, $3, $4)", [name, email, hashedPassword, created_at]);
-        await pool.end();
 
         // Save data in response object
         response = {
@@ -51,7 +52,7 @@ const signUp = async (req, res) => {
         }
 
         // Return a res.redirect('/profile')
-        res.status(201).cookie("jwt", token)
+        res.status(201).cookie("jwt", token).cookie("user", response);
         return res.redirect(303, "/profile")
 
     } catch (error) {
@@ -67,6 +68,12 @@ const logIn = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        if(email.trim() === '' || password.trim() === '') {
+            return res.status(400).json({
+                message: 'Invalid field params.'
+            })
+        }
+
         // Validate if user exists in DB.
         const { rows: user } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
@@ -91,7 +98,7 @@ const logIn = async (req, res) => {
             email: user[0].email,
         }
         
-        res.status(201).cookie("jwt", token)
+        res.status(201).cookie("jwt", token).cookie("user", response);
         return res.redirect(303, "/profile")
     } catch (error) {
         console.log(error);
@@ -99,12 +106,8 @@ const logIn = async (req, res) => {
     }
 }
 
-const userProfile = (req, res) => {
-    res.send(`Your name is ${response.name}`);
-}
 
 export {
     signUp,
     logIn,
-    userProfile,
 }

@@ -3,6 +3,14 @@ import morgan from 'morgan';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+import hbs from 'hbs';
+hbs.registerPartials(__dirname + '/views/partials');
 
 import './auth/auth.passport.js';
 
@@ -12,6 +20,8 @@ const app = express();
 
 // Setter
 app.set("port", 3000);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
 
 // Middlewares
 app.use(morgan("dev"));
