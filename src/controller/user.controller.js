@@ -52,8 +52,8 @@ const signUp = async (req, res) => {
         }
 
         // Return a res.redirect('/profile')
-        res.status(201).cookie("jwt", token).cookie("user", response);
-        return res.redirect(303, "/profile")
+        // res.status(201).cookie("jwt", token).cookie("user", response);
+        return res.redirect(303, `/log-in`);
 
     } catch (error) {
         console.log(error);
@@ -93,13 +93,14 @@ const logIn = async (req, res) => {
         const token = jwt.sign({email}, process.env.SECRET_KEY, {expiresIn: 60*60});
 
         response = {
+            id: user[0].id,
             status: 'Logged in',
             name: user[0].name,
             email: user[0].email,
         }
         
         res.status(201).cookie("jwt", token).cookie("user", response);
-        return res.redirect(303, "/profile")
+        return res.redirect(303, `/profile/${user[0].id}`);
     } catch (error) {
         console.log(error);
         return res.status(500).json({message: "Internal server error."})

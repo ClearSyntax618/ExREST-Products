@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href= "/css/products.css">
+    <title>Document</title>
+</head>
+<body>
+        <h1>Products List</h1>
+
+        {{#each this}}
+            <div class="card">
+                <h2>{{this.title}}</h2>
+                <p>{{this.description}}</p>
+                <p>${{this.price}}</p>
+                <p>{{this.name}}</p>
+            </div>
+        {{/each}}
+</body>
+</html>

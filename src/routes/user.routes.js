@@ -15,15 +15,16 @@ router.post('/sign-up', signUp);
 router.post('/log-in', logIn);
 
 // GET
-router.get('/profile', passport.authenticate('jwt', {session: false, failureRedirect: '/log-in'}), (req, res) => {
+router.get('/profile/:id', passport.authenticate('jwt', {session: false, failureRedirect: '/log-in'}), (req, res) => {
+    const { id } = req.params;
     const { user: {name, email, status} } = req.cookies;
-    res.render('index', {name, email, status});
+    res.render('users/profile', {id, name, email, status});
 });
 router.get('/log-in', isAuth, (req, res) => {
-    res.render('log-in');
+    res.render('users/log-in');
 });
 router.get('/sign-up', isAuth, (req, res) => {
-    res.render('sign-up');
+    res.render('users/sign-up');
 });
 
 

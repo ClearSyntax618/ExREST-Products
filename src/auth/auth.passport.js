@@ -12,11 +12,13 @@ const cookieExtractor = (req) => {
 passport.use(new JwtStrategy({
     jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
     secretOrKey: process.env.SECRET_KEY,
-}, async ({email}, done) => {
+    passReqToCallback: true,
+}, async (req, {email}, done) => {
     try {
+        const { id } = req.params;
         const user = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
 
-        if(user) {
+        if(user && user.rows[0].id == id) {
             return done(null, user);
         } else {
             return done(null, false);
@@ -35,7 +37,7 @@ export const isAuth = (req, res, next) => {
         if(!user) {
             return next();
         } else {
-            return res.redirect('/profile');
+            return res.redirect(`/profile/${user.id}`);
         }
     } catch (error) {
         console.log(error);

@@ -19,12 +19,16 @@ import { userRouter } from './routes/user.routes.js';
 
 const app = express();
 
+app.use(express.static('public'));
+
+
 // Setter
 app.set("port", 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 // Middlewares
+
 app.use(morgan("dev"));
 app.use(cookieParser())
 app.use(express.json());
