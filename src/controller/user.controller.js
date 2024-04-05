@@ -13,7 +13,7 @@ const signUp = async (req, res) => {
     // Get {name, email, password} from req.body.
     const { name, email, password } = req.body;
     // Create a empty products array.
-    const products = []; // Study DB relationship...
+    // const products = []; // Study DB relationship...
     // Set a created_at field.
     const created_at = new Date();
 

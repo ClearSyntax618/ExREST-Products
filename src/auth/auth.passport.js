@@ -29,13 +29,13 @@ passport.use(new JwtStrategy({
 
 // isAuth checker
 export const isAuth = (req, res, next) => {
-    const { user: {status} } = req.cookies;
+    const { user } = req.cookies;
 
     try {
-        if(!status || status == undefined) {
+        if(!user) {
             return next();
         } else {
-            return res.redirect('/profile')
+            return res.redirect('/profile');
         }
     } catch (error) {
         console.log(error);

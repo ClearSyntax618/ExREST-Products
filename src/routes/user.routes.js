@@ -1,13 +1,12 @@
 import { Router } from 'express';
+import passport from 'passport';
+import { isAuth } from '../auth/auth.passport.js';
 
 import {
     signUp,
     logIn,
 } from '../controller/user.controller.js';
 
-import { isAuth } from '../auth/auth.passport.js';
-
-import passport from 'passport';
 
 const router = Router();
 
@@ -19,7 +18,7 @@ router.post('/log-in', logIn);
 router.get('/profile', passport.authenticate('jwt', {session: false, failureRedirect: '/log-in'}), (req, res) => {
     const { user: {name, email, status} } = req.cookies;
     res.render('index', {name, email, status});
-})
+});
 router.get('/log-in', isAuth, (req, res) => {
     res.render('log-in');
 });
@@ -29,10 +28,17 @@ router.get('/sign-up', isAuth, (req, res) => {
 
 
 router.get('/log-out', (req, res) => {
+    res.clearCookie("jwt");
     res.clearCookie("user");
     res.redirect('/log-in');
+
     res.end();
-})
+});
+
+// By default
+router.all('/', (req, res) => {
+    res.redirect('/products')
+});
 
 
-export { router }
+export { router as userRouter }

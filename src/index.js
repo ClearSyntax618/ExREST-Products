@@ -14,7 +14,8 @@ hbs.registerPartials(__dirname + '/views/partials');
 
 import './auth/auth.passport.js';
 
-import { router } from './routes/user.routes.js';
+import { productRouter } from './routes/product.routes.js';
+import { userRouter } from './routes/user.routes.js';
 
 const app = express();
 
@@ -34,7 +35,8 @@ app.use(express.text());
 app.use(passport.initialize());
 
 // Routes
-app.use(router);
+app.use(userRouter);
+app.use(productRouter);
 
 // Running server
 app.listen(app.get("port"), () => {
