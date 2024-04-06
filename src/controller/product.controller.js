@@ -31,7 +31,7 @@ const addProduct = async (req, res) => {
 // GET
 const products = async (req, res) => {
     // Get all products from DB.
-    const {rows: products} = await pool.query("SELECT title, description, price, name FROM products INNER JOIN users ON products.user_id = users.id");
+    const {rows: products} = await pool.query("SELECT products.id, title, description, price, name FROM products INNER JOIN users ON products.user_id = users.id");
 
     // Show them in page.
     console.log(products);
@@ -40,11 +40,14 @@ const products = async (req, res) => {
 
 const productById = async (req, res) => {
     // Get a product by id param.
-    // const {rows: products} = await pool.query("SELECT title, description, price, name FROM products INNER JOIN users ON products.user_id = users.id");
+    const { id } = req.params;
+
+    const {rows: products} = await pool.query("SELECT title, description, price, name FROM products INNER JOIN users ON products.user_id = users.id AND products.id = $1", [id]);
+
+    const product = products[0];
 
     // Show their attributes
-    const { id } = req.params;
-    res.render('products/product-list', {id})
+    res.render('products/product-list', {product})
 }
 
 export {

@@ -15,10 +15,10 @@ passport.use(new JwtStrategy({
     passReqToCallback: true,
 }, async (req, {email}, done) => {
     try {
-        const { id } = req.params;
+        const { name } = req.params;
         const user = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
 
-        if(user && user.rows[0].id == id) {
+        if(user && user.rows[0].name == name) {
             return done(null, user);
         } else {
             return done(null, false);
@@ -37,7 +37,7 @@ export const isAuth = (req, res, next) => {
         if(!user) {
             return next();
         } else {
-            return res.redirect(`/profile/${user.id}`);
+            return res.redirect(`/profile/${user.name}`);
         }
     } catch (error) {
         console.log(error);

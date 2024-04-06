@@ -100,7 +100,7 @@ const logIn = async (req, res) => {
         }
         
         res.status(201).cookie("jwt", token).cookie("user", response);
-        return res.redirect(303, `/profile/${user[0].id}`);
+        return res.redirect(303, `/profile/${user[0].name}`);
     } catch (error) {
         console.log(error);
         return res.status(500).json({message: "Internal server error."})

@@ -15,7 +15,7 @@ router.post('/sign-up', signUp);
 router.post('/log-in', logIn);
 
 // GET
-router.get('/profile/:id', passport.authenticate('jwt', {session: false, failureRedirect: '/log-in'}), (req, res) => {
+router.get('/profile/:name', passport.authenticate('jwt', {session: false, failureRedirect: '/log-in'}), (req, res) => {
     const { id } = req.params;
     const { user: {name, email, status} } = req.cookies;
     res.render('users/profile', {id, name, email, status});
