@@ -1,9 +1,22 @@
 <nav>
+   {{#if name}}
     <button>
         <a href="http://localhost:3000/profile/{{name}}">
             Profile
         </a>
     </button>
+    {{else}}
+    <button>
+        <a href="http://localhost:3000/log-in">
+            Log in
+        </a>
+    </button>
+    <button>
+        <a href="http://localhost:3000/sign-up">
+            Sign up
+        </a>
+    </button>
+    {{/if}}
 
     <button type="button">
             <a href="http://localhost:3000/products">Products</a>

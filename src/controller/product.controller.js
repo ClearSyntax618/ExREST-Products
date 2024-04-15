@@ -31,10 +31,14 @@ const addProduct = async (req, res) => {
 const products = async (req, res) => {
     // Get all products from DB.
     const {rows: products} = await pool.query("SELECT products.id, title, description, price, name FROM products INNER JOIN users ON products.user_id = users.id");
-    const { user: {name} } = req.cookies;
+    const { user } = req.cookies;
 
-    // Show them in page.
-    res.render('products/products-list', {name, products})
+    if(!user) {
+        res.render('products/products-list', {products})
+    } else {
+        const {name} = user;
+        res.render('products/products-list', {name, products})
+    }
 }
 
 const productById = async (req, res) => {
