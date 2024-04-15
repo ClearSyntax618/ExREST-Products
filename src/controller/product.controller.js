@@ -1,4 +1,3 @@
-import e from 'express';
 import { pool } from '../config/db.config.js';
 
 // POST
@@ -32,10 +31,10 @@ const addProduct = async (req, res) => {
 const products = async (req, res) => {
     // Get all products from DB.
     const {rows: products} = await pool.query("SELECT products.id, title, description, price, name FROM products INNER JOIN users ON products.user_id = users.id");
+    const { user: {name} } = req.cookies;
 
     // Show them in page.
-    console.log(products);
-    res.render('products/products-list', products)
+    res.render('products/products-list', {name, products})
 }
 
 const productById = async (req, res) => {
@@ -45,6 +44,10 @@ const productById = async (req, res) => {
     const {rows: products} = await pool.query("SELECT title, description, price, name FROM products INNER JOIN users ON products.user_id = users.id AND products.id = $1", [id]);
 
     const product = products[0];
+
+    if(!product) {
+        return res.status(404).send("Product is not found");
+    }
 
     // Show their attributes
     res.render('products/product-list', {product})

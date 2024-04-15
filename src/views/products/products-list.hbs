@@ -4,20 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href= "/css/products.css">
-    <title>Document</title>
+    <title>Products</title>
 </head>
+
 <body>
+        {{> navbar}}
         <h1>Products List</h1>
 
-        {{#each this}}
+        <!-- Make a table with data -->
+        <table style="width:100%">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Seller</th>
+                <th>Action</th>
+            </tr>
+
+            
+            {{#each products}}
             <a href="http://localhost:3000/product/{{this.id}}">
-                <div class="card">
-                    <h2>{{this.title}}</h2>
-                    <p>{{this.description}}</p>
-                    <p>{{this.price}}</p>
-                    <p>{{this.name}}</p>
-                </div>
+            <tr>
+                    <td>{{this.title}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.name}}</td>
+                    <td>
+                        <button type="button">
+                            <a href="#">Edit</a>
+                        </button>
+
+                        <button type="button">
+                            <a href="#">Delete</a>
+                        </button>
+                    </td>
+            </tr>
             </a>
         {{/each}}
+
+        </table>
+
+        <button type="button">
+            <a href="http://localhost:3000/add-product">Add product</a>
+        </button>
 </body>
 </html>
